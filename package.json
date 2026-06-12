@@ -1,0 +1,15 @@
+{
+  "name": "demo-pied-piper",
+  "private": true,
+  "scripts": {
+    "build": "scripts/build.sh",
+    "demo": "scripts/run_demo.sh"
+  },
+  "dependencies": {
+    "@openhint/hintbook-software-engineer": "^1.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "typescript": "^5.7.0"
+  }
+}

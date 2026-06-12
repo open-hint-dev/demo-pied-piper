@@ -1,0 +1,4 @@
+name: demo-pied-piper
+description: Core monorepo of Pied Piper — a multi-language orchestrator pipeline (Go orchestrator, Python middle-out compression, TypeScript renderer) with cross-language contracts enforced by HINT
+books:
+    - npm://@openhint/hintbook-software-engineer
