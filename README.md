@@ -2,11 +2,11 @@
 
 Welcome to the core monorepo of **Pied Piper**, the legendary startup that revolutionized data compression (straight from the _Silicon Valley_ TV show!).
 
-[![Compiler: HINT](https://img.shields.io/badge/Compiler-HINT%20v1.0.0-blueviolet)](https://github.com/open-hint-dev/hint)
+[![HINT](https://img.shields.io/badge/HINT-v1.1-blueviolet)](https://github.com/open-hint-dev/hint)
 [![Hintbook: software--engineer](https://img.shields.io/badge/Hintbook-software--engineer-blue)](https://github.com/open-hint-dev/hintbook-software-engineer)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green)](https://github.com/open-hint-dev/hint)
 
-> **Disclaimer:** This is a fictional demonstration project built to showcase how [HINT (Human Intent Native Transpiler)](https://github.com/open-hint-dev/hint) enforces strict architectural boundaries in a multi-language microservice environment. No Weissman scores were inflated during the making of this repo.
+> **Disclaimer:** This is a fictional demonstration project built to showcase how [HINT](https://github.com/open-hint-dev/hint) keeps architectural boundaries intact in a multi-language microservice environment. No Weissman scores were inflated during the making of this repo.
 
 ## Table of Contents
 
@@ -18,14 +18,14 @@ Welcome to the core monorepo of **Pied Piper**, the legendary startup that revol
     - [One Contract, Three Languages](#one-contract-three-languages)
     - [Architecture as Code](#architecture-as-code)
   - [Repository Architecture](#repository-architecture)
-  - [How a Compilation Works](#how-a-compilation-works)
+  - [How a Query Works](#how-a-query-works)
   - [Demo Walkthrough](#demo-walkthrough)
     - [Step 0 — Setup](#step-0--setup)
     - [Scenario 1 — Delete a Service, Regenerate It From Spec](#scenario-1--delete-a-service-regenerate-it-from-spec)
     - [Scenario 2 — Try to Talk the AI Out of the Contract](#scenario-2--try-to-talk-the-ai-out-of-the-contract)
     - [Scenario 3 — One Prompt, Three Languages, Zero Drift](#scenario-3--one-prompt-three-languages-zero-drift)
     - [Scenario 4 — Change One Contract, Update Every Service](#scenario-4--change-one-contract-update-every-service)
-    - [Scenario 5 — Audit Mode: Catch the Poisoned Service](#scenario-5--audit-mode-catch-the-poisoned-service)
+    - [Scenario 5 — Catch the Poisoned Service](#scenario-5--catch-the-poisoned-service)
     - [Scenario 6 — Look Inside the Compiler](#scenario-6--look-inside-the-compiler)
   - [The Closing Argument](#the-closing-argument)
 
@@ -47,7 +47,9 @@ Every service passes its own tests. The system crashes on integration. You spend
 
 Instead of fighting with heavy ProtoBuf/API generators for three internal processes, Pied Piper manages its architecture the way it manages code — _Intent-as-Code_.
 
-Using [HINT](https://github.com/open-hint-dev/hint) and the [@openhint/hintbook-software-engineer](https://github.com/open-hint-dev/hintbook-software-engineer) vocabulary, we declare the wire format, the error envelope, the logging shape, and each service's contract **once**, in plain Markdown `.hint` files. The HINT transpiler compiles them into a rigid, binding execution contract for the AI agent.
+Using [HINT](https://github.com/open-hint-dev/hint) and the [@openhint/hintbook-software-engineer](https://github.com/open-hint-dev/hintbook-software-engineer) vocabulary, we record the wire format, the error envelope, the logging shape, and each service's contract **once**, in plain Markdown `.hint` files next to the code they govern.
+
+HINT is a **context compiler**: ask it about a path and it returns only the knowledge that applies there, inherited from the monorepo root down. The agent working in `compression-py/` gets the global wire contract, the Python folder rules, and that file's spec — and not the TypeScript renderer's type-guard policy.
 
 - **The Human** remains the architect — defining data shapes, flows, dependency whitelists, and absolute prohibitions.
 - **The AI** is relegated to a precision implementer — writing fast, idiomatic code for each language, strictly inside those borders.
@@ -111,18 +113,26 @@ demo-pied-piper/
     └── run_demo.sh / run_demo.sh.hint  # Runs the full pipeline end to end
 ```
 
-## How a Compilation Works
+## How a Query Works
 
 Every `.hint` file is plain Markdown — open any of them in your editor. A heading like `# entity CompressionResult {#compression_result}` opens a typed block; heading depth nests blocks (`field` inside an `entity`, `error` inside a `func`).
 
-When you run `hint <path>`, the compiler:
+When you run `hint <path>`, HINT:
 
 1. Resolves the companion spec for the target path (`compressor.py` → `compressor.py.hint`) — the target does not need to exist yet.
 2. Wraps it in its **folder chain**: monorepo root → `compression-py` → the file. Global contracts visibly enclose service context; the `@include`-d shared hints arrive inside the root's `rule` blocks.
-3. Renders every block through the hintbook's templates into binding tags (`<critical_system_mandates>`, `<prohibited_anti_patterns>`, `<function_contract>`, `<read_it>`, …), prefixed by a senior-engineer role header and closed by a verification checklist footer.
-4. Strips everything spec-internal: `notes` blocks (open questions, design history) never reach the prompt.
+3. Renders every block through the hintbook's templates into binding tags (`<critical_system_mandates>`, `<prohibited_anti_patterns>`, `<function_contract>`, `<read_it>`, …).
+4. Strips everything spec-internal: `notes` blocks (open questions, design history) never reach the output.
 
-Three modes, one set of specs: `hint` **implements**, `hint --mode fix` **repairs** code that violates the spec, `hint --mode review` **audits** and reports findings with severity — no edits.
+That output is **knowledge only** — no persona, no reporting format — so an agent already mid-session can run it before every edit without paying for scaffolding. Add `--prompt` when you are piping to a *fresh* agent that has nothing else: it wraps the same knowledge in a senior-engineer role header and a verification checklist footer.
+
+```bash
+hint compression-py/compressor.py             # what governs this file
+hint --prompt compression-py/compressor.py    # ...framed as a standalone implementation prompt
+hint search "wire format between services"    # when you know the intent, not the path
+```
+
+stderr carries the verdict — which ancestor a path inherited from, or that it matched nothing — and the exit code says so too: `0` succeeded, `1` a check failed, `2` nothing you asked for matched.
 
 ---
 
@@ -138,7 +148,7 @@ Prerequisites: Node.js ≥ 24, Go ≥ 1.26, Python ≥ 3.12.
 git clone <this-repo> && cd demo-pied-piper
 npm install                      # installs @openhint/hintbook-software-engineer
 npm install -g @openhint/cli     # the `hint` compiler
-hint --dry-run '**/*.hint'       # validate every spec resolves (CI-friendly)
+hint --strict '**/*.hint' > /dev/null   # validate every spec resolves; exits non-zero if not (CI gate)
 ```
 
 You need an AI agent. The examples use [Claude Code](https://claude.com/claude-code); any agent that accepts a piped prompt works the same way. [AGENTS.md](AGENTS.md) / [CLAUDE.md](CLAUDE.md) already teach in-repo agents to compile specs before touching any file.
@@ -226,9 +236,11 @@ A new platform regulation: every log line must carry its pipeline stage. Impleme
 2. Re-conform every service in one pass — the root `_.hint` includes the changed file, so every compiled prompt already carries the new rule:
 
     ```bash
-    claude -p "Run hint --mode fix for orchestrator-go/main.go, compression-py/compressor.py, renderer-ts/app.ts and scripts/*.sh, and apply the smallest conforming changes"
+    claude -p "Re-conform orchestrator-go/main.go, compression-py/compressor.py, renderer-ts/app.ts and scripts/*.sh to their HINT knowledge, with the smallest changes that restore conformance"
     scripts/run_demo.sh
     ```
+
+    Because these files were locked with `hint lock`, HINT knows exactly which blocks moved. `hint diff <paths>` lists them, and `hint --prompt <paths>` carries that drift list into the prompt automatically — scoping the work to what changed instead of rewriting conforming code.
 
 3. Review what actually happened, the way engineers do:
 
@@ -238,27 +250,39 @@ A new platform regulation: every log line must carry its pipeline stage. Impleme
 
 One file changed the rule; the compiler carried it into Go, Python, TypeScript, and Bash; Git shows precisely what moved. No wiki page, no "please remember" message in the team channel.
 
-### Scenario 5 — Audit Mode: Catch the Poisoned Service
+### Scenario 5 — Catch the Poisoned Service
 
-_Proves: the same specs that generate code also police it._
+_Proves: the same knowledge that generates code also polices it — and the cheap check needs no model at all._
 
-Sabotage the compressor the way a hurried hotfix would — in [compression-py/compressor.py](compression-py/compressor.py), rename the output key `compressed_payload` to `compressedPayload` and switch one `log(...)` call to print to stdout. Then audit:
+Sabotage the compressor the way a hurried hotfix would — in [compression-py/compressor.py](compression-py/compressor.py), rename the output key `compressed_payload` to `compressedPayload` and switch one `log(...)` call to print to stdout.
+
+First, the deterministic check. No model, no tokens, no waiting:
 
 ```bash
-hint --mode review compression-py/compressor.py | claude -p
+hint verify compression-py/compressor.py; echo "exit=$?"
 ```
 
-The report walks the specification block by block, quotes the deviant lines, names the violated blocks (`{#compression_result}`, the stdout-purity mandate in `{#wire_contract}`), assigns severity, proposes the minimal fix — and closes with an explicit **does-not-conform** verdict. Findings, never silent fixes — and `--mode fix` applies the smallest conforming repair when you want it done.
+Every surface the spec declares — each `entity`, `field`, `func`, `error` — must appear by name in the code. The renamed key is gone, so `verify` names it and **exits 1**. This is what you gate CI on.
+
+`verify` is a presence check, not a proof of correctness: it cannot see that a log line went to stdout. For that, hand an agent the knowledge and ask:
+
+```bash
+hint --prompt compression-py/compressor.py | claude -p "Audit this file against the specification above. Report findings with severity and the block each one violates. Do not change any code."
+```
+
+The audit quotes the deviant lines and names the violated blocks (`{#compression_result}`, the stdout-purity mandate in `{#wire_contract}`). Two tools, two costs: `verify` is free and catches omissions; the agent costs tokens and catches semantics.
 
 ### Scenario 6 — Look Inside the Compiler
 
 _Proves: zero magic, zero hidden prompts — and zero leakage of internal notes._
 
 ```bash
-hint compression-py/compressor.py > /tmp/prompt.md
+hint compression-py/compressor.py > /tmp/knowledge.md          # what an agent gets mid-session
+hint --prompt compression-py/compressor.py > /tmp/prompt.md    # ...plus the cold-start framing
+wc -c /tmp/knowledge.md /tmp/prompt.md
 ```
 
-Open `/tmp/prompt.md`: a senior-engineer role header, your blocks rendered as binding tags with the folder chain visibly nesting the global contracts around the service spec, the `@include`-d shared hints delivered verbatim inside the root's `rule` blocks, the `<read_it>` directive pointing at the Go source — and a closing implementation checklist. Then confirm what _didn't_ make it in:
+Open `/tmp/knowledge.md`: your blocks rendered as binding tags, with the folder chain visibly nesting the global contracts around the service spec, the `@include`-d shared hints delivered verbatim inside the root's `rule` blocks, and the `<read_it>` directive pointing at the Go source. Nothing else — no persona, no checklist. The difference between the two files is exactly the framing, and it is the same constant bytes on every call, which is why it is opt-in. Then confirm what _didn't_ make it in:
 
 ```bash
 hint compression-py/compressor.py | grep -c "Spec-internal"   # → 0

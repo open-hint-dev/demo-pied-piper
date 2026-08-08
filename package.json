@@ -6,7 +6,7 @@
     "demo": "scripts/run_demo.sh"
   },
   "dependencies": {
-    "@openhint/hintbook-software-engineer": "^1.0.0"
+    "@openhint/hintbook-software-engineer": "^1.1.0"
   },
   "devDependencies": {
     "@types/node": "^24.0.0",
