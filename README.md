@@ -2,7 +2,7 @@
 
 Welcome to the core monorepo of **Pied Piper**, the legendary startup that revolutionized data compression (straight from the _Silicon Valley_ TV show!).
 
-[![HINT](https://img.shields.io/badge/HINT-v1.1-blueviolet)](https://github.com/open-hint-dev/hint)
+[![HINT](https://img.shields.io/badge/HINT-v1.3-blueviolet)](https://github.com/open-hint-dev/hint)
 [![Hintbook: software--engineer](https://img.shields.io/badge/Hintbook-software--engineer-blue)](https://github.com/open-hint-dev/hintbook-software-engineer)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green)](https://github.com/open-hint-dev/hint)
 
@@ -45,11 +45,11 @@ Every service passes its own tests. The system crashes on integration. You spend
 
 ## The Solution: Enter HINT
 
-Instead of fighting with heavy ProtoBuf/API generators for three internal processes, Pied Piper manages its architecture the way it manages code — _Intent-as-Code_.
+Instead of fighting with heavy ProtoBuf/API generators for three internal processes, Pied Piper manages its architecture as **Spec-as-Source**.
 
 Using [HINT](https://github.com/open-hint-dev/hint) and the [@openhint/hintbook-software-engineer](https://github.com/open-hint-dev/hintbook-software-engineer) vocabulary, we record the wire format, the error envelope, the logging shape, and each service's contract **once**, in plain Markdown `.hint` files next to the code they govern.
 
-HINT is a **context compiler**: ask it about a path and it returns only the knowledge that applies there, inherited from the monorepo root down. The agent working in `compression-py/` gets the global wire contract, the Python folder rules, and that file's spec — and not the TypeScript renderer's type-guard policy.
+Ask HINT about a path and it returns only the Spec-as-Source knowledge that applies there, inherited from the monorepo root down. The agent working in `compression-py/` gets the global wire contract, the Python folder rules, and that file's spec — and not the TypeScript renderer's type-guard policy.
 
 - **The Human** remains the architect — defining data shapes, flows, dependency whitelists, and absolute prohibitions.
 - **The AI** is relegated to a precision implementer — writing fast, idiomatic code for each language, strictly inside those borders.
@@ -240,7 +240,7 @@ A new platform regulation: every log line must carry its pipeline stage. Impleme
     scripts/run_demo.sh
     ```
 
-    Because these files were locked with `hint lock`, HINT knows exactly which blocks moved. `hint diff <paths>` lists them, and `hint --prompt <paths>` carries that drift list into the prompt automatically — scoping the work to what changed instead of rewriting conforming code.
+    Run `hint lock <paths>` after the baseline is green. HINT then knows exactly which blocks moved: `hint diff <paths>` lists them, and `hint --prompt <paths>` carries that drift list into the prompt automatically — scoping the work to what changed instead of rewriting conforming code.
 
 3. Review what actually happened, the way engineers do:
 
@@ -293,6 +293,24 @@ The root spec's `notes` block (design rationale for maintainers) was stripped at
 ---
 
 ## The Closing Argument
+
+### Deterministic emit, holes, drift, and CI
+
+The committed [`generated/wire_message.ts.hint`](generated/wire_message.ts.hint) produces [`generated/wire_message.ts`](generated/wire_message.ts) without an agent. Its `validateWireMessage` hole is filled; `normalizePayload` deliberately still contains the emitted stub.
+
+```bash
+hint emit --check generated/wire_message.ts   # green: the artifact matches
+hint status --exit-code                       # exit 1: names the one unfilled hole
+```
+
+Edit the `Normalize transport newlines` block in the spec, then run the same check:
+
+```text
+hint: 1 of 1 artifact(s) differ from what their specs produce.
+hint:   generated/wire_message.ts — run 'hint emit generated/wire_message.ts' to reconcile.
+```
+
+`hint emit generated/wire_message.ts` updates the declaration and marker hash while preserving the filled validation body byte-for-byte. `hint diff generated/wire_message.ts` names the moved block because the committed `hint.lock` records it. Run [`./demo-smoke.sh`](demo-smoke.sh) to replay the CLI-only tour; its expected status failure is asserted explicitly so it cannot become a false-green gate.
 
 > Letting an agent loose on a polyglot repo without contracts is like hiring a brilliant engineer who reads none of your docs and forgets every convention between tasks: fast code, camelCase on one side of the pipe, snake_case on the other, and a stack trace in the JSON stream at the worst possible moment. Integration review ends up taking longer than writing the code yourself.
 >

@@ -1,0 +1,78 @@
+# hint.lock — managed by `hint lock`. Records which specs have been generated so
+# unchanged specs can be skipped. Deterministic and diff-friendly; do not edit by hand.
+version: 2
+files:
+  compression-py/compressor.py:
+    hash: cf49248c9939da2b60106b9aaf25546c774dde59d08db5a2f52794161b783cdb
+    target: 5bfb91bcc72a940cbbd6f30c5240df1eac29c6a9ecdd5c45d88b4966c8d175f8
+    blocks:
+      (preamble): 1f3371e8a386873ebc3d1b3f6ec77a02180227cb185a2cf56edecec497482bcc
+      read ../orchestrator-go/main.go: e67d6391468a35786a432c5bd68678add44bbe34d27212ff4e5d9b814e79cc81
+      entity CompressionResult: e968db935fd125d6d8356f9cd8bb24c5abc5d2c35cbfe5d08c02c8f9adbb27c3
+      entity CompressionResult > field request_id: 4cbed8c15663a7c1d38adc12f5411153bfe3c7899fe860ffc8f7adb2ef4fa26e
+      entity CompressionResult > field source_service: 695a49f4f31b12e90705f566dd67a6ec2d8c1241d591163f6c5ce5b32f5fdec2
+      entity CompressionResult > field algorithm: aa40473a0c2b4616df6e9bbe1a14408c4b43f78bccc6084624f31d6fe31a6870
+      entity CompressionResult > field original_size_bytes: 344d133bfbbea35c98809a40e8378f29d3abd56c725d6bb236cf4471e37720ad
+      entity CompressionResult > field compressed_payload: b51db1372bb28189fd37beb8a60c78110e185599ebb99716e96d4625cfc4ef1c
+      entity CompressionResult > field compression_ratio: d1be1cced56eaf58160f4e83c4c1f573c8cddee9c05ddaa83dd7c1975049ab03
+      func compress_middle_out: 92a72aa4ccb2ab15ebc27a1f3ac8e086ad694af77d2429f94a14de911790fd1a
+      func compress_middle_out > arg text: 5f097402de86f3c8907fed4a43b38da0bcb152763f42ef04c1fff77bb5a4f569
+      func compress_middle_out > result: 314bbcd0e646611fbb256ee46ac682fea956e4e84744cc7b6e70ed06c4b58ec1
+      func main: 09c510f0d5b3cd478624a70052aa66ace7bc56921b95993931190fd65151894e
+      func main > flow: 87d2bdfdcd1568f0e670c16d705912c81126767b98812ee4c8fc262b5e57e404
+      func main > error PP_BAD_JOB: f735496efd695c2080c8844f407506b9bf826cad0e76e891e7c8ec2a7a2d1561
+  generated/wire_message.ts:
+    hash: 481fbd62b60ab0a091389bfb2e95a1cdd8d92518179c838f180f94f297d1c1a1
+    target: 58b59eb54859baa99e8906739babdfa780393f0696053c55af2390970a5d9605
+    blocks:
+      entity WireMessage: cab0a2a587b23fe7f918488eac009fb1448a705f142afcbc7b66eb6244ebccd6
+      "entity WireMessage > field request_id: string": 627d5ffb8de481dc75725ea0975e98148b855c5934000f6de41fac951f95a98c
+      "entity WireMessage > field payload: string": c911691af753f6529cfbc52dbfa47373f2847ca601bc3cc0d87b22b78503042f
+      func validateWireMessage: de3e5f89e266ca972df74ec41a61b609ca368aeab6f3d7b697b168421a49896f
+      "func validateWireMessage > arg value: unknown": 32e135755b9274d972ce024f70c52597ef6b0e28ccd27412b0b23d3078b324d0
+      func validateWireMessage > result boolean: f9364e4764e1695d8c6818fb74a037b2a5aa59fd35fb2cfc1c5472f162436f55
+      func validateWireMessage > flow: 190a326c503c94956ba79ad646e349d607e1c31d6c238d8c0de3203e3b55e208
+      func normalizePayload: c6ee9080d96793acde38f080ae281f9ba38f4b27acce0a7a24daefd3e8115df7
+      "func normalizePayload > arg payload: string": c6a15cb03fe9f84ed6949b488324bb3ecede683e6737c36c0a47014017246cb6
+      func normalizePayload > result string: 9cbabc4d0a7e3281036106aa740b09a745ecb112ab8f2588c16dee95b873967a
+      func normalizePayload > flow: 86c77ab60a92bc90eb69813e8593eb393094f6fe826a5025ba8a8266649d9a8a
+  orchestrator-go/main.go:
+    hash: 381d43d8a3bf35f114eb8081caa0954ce1e7a9e3e3f8127e9c6aba910e9a04bc
+    target: b1f603d41dd12f98e03a7d2ab37c18a09e057acb5ea1bb31913a3aaf29035d1a
+    blocks:
+      (preamble): 9deea0112f5d9b118cae44f644627f00d6d2b5402bb969a26dbf9ee1bce34896
+      entity CompressionJob: 8c73f0e20405fe4f1f50e127bda7d9a04b2534c8e4b771cb00d90d35a05145ba
+      entity CompressionJob > field request_id: 562d8a0f0a3687f015ae8bb1e554820a5405ef0ffa0f6e09143850a88ffe238d
+      entity CompressionJob > field source_service: 94e6975762f276c4d9488658559e01753b6cd8d6641503db493c8cd21f2afe04
+      entity CompressionJob > field payload: 0147bfece4a52e92b4fc2423d0aa2cd41e467858e64fd0570cd7cb7f711175ad
+      func main: b8b9e7bc0659b690defbc94f1478b677e7cda268b84d897a0e36e58cdef5d923
+      func main > flow: 862af3d7d9b8f7c2d910507ce320fa19da0a179e2a052ae26f48e16e12273c5a
+      func main > error PP_EMPTY_INPUT: 817ba8e9c2104f1556535b7631e5034a8da8b7b3f570278d2345e0c355b0a9b4
+  renderer-ts/app.ts:
+    hash: de344001165be879c81a96d5b4262bfa887361ad99eb6a062195ce8547c26b2c
+    target: e6a55b442f83491660d22bd92c3c451ec4099ee6fd3b52011396e174446a581d
+    blocks:
+      (preamble): 7468426ec1fa7379edc74658f7bee3d2d30410d1baf4d9f274dd876dd6ba01b6
+      read ../compression-py/compressor.py: fa95741f478c98a842b3794350de21d5efe7334bc46a5b52c6018eb8a1d7cddc
+      func renderReport: d5b40eea9659b03d545c0888a4275a295ebe95d45a51e6a4ceb1d5128aaeda88
+      func renderReport > arg result: b74ecf7e1600faed41007348055c048b24ab1e8349e8ef13eb326b1a0d8fe89f
+      func renderReport > result: 4996786bb701654e3daf32a511f575c7904d05bdf9de4faf14e2ea69aca2cd76
+      func renderReport > flow: df527d75f8ce80beb81ec9dcb46a0d0cf320441280741395419a769f89b53d0a
+      example Report Layout: b65b87fb91bf1de6084ee22c12d5f4351098e40cd00437ffffff14026c2d6aa0
+      func main: 58826c33a0462907dceb523c457c13c763a476314d2bc7b9eb05bc50894af296
+      func main > flow: c7cb8fa9a3282c1677afe1c8556ca25c11c338f959a6e08676bce66489679bc9
+      func main > error PP_BAD_RESULT: a942ca5c01695d4f3ff22b8bc1e2c10cf0b530642c2bdea0fe909d8a1f093139
+  scripts/build.sh:
+    hash: 8e2c8f12d6a9fe931fd475cf704559da7ec9cd671ecd0ee40bdf8af0e7aab459
+    target: e98232197d5c714d1f399dc953a8adc90f82dda4ec32ee9ae89ab84d2772390f
+    blocks:
+      (preamble): 71c4ee29efd53338788bef2f89414a0b28f181b85af1d59a1678674456747183
+      action build: ce7fde0c02734b4163f14c9b03319ea48b0ec0a20a3713b20426c22d385148d3
+  scripts/run_demo.sh:
+    hash: 97a1652772c20c26543eace9b036999f1858088ecf898012e67dfe73b38d53c8
+    target: d838a0584c06175fd050bcd7a2e51136816c82bd8d1b1c5391b17edabc6ab589
+    blocks:
+      (preamble): 19fb86d7d706dcce8b82cd81d96ee9df3f1fb61ad59bfdd388359444b49cc99d
+      action run_demo: 27d5d7dbc28cd2f00f8f58e7923b2c4f7df9411f2905758a91bfa815fdbebef7
+      action run_demo > arg text: 1db146c5eb9a758fd0a3a26ea2f5c57d69bd4b0a9d85a6b428f10cdaa3e769e4
+      action run_demo > flow: a869735417039474625fcf1e2c789934c6c3771e5bdc923acfa485661a1cb971
