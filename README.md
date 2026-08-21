@@ -2,11 +2,13 @@
 
 Welcome to the core monorepo of **Pied Piper**, the legendary startup that revolutionized data compression (straight from the _Silicon Valley_ TV show!).
 
-[![HINT](https://img.shields.io/badge/HINT-v1.3-blueviolet)](https://github.com/open-hint-dev/hint)
+[![HINT](https://img.shields.io/badge/HINT-v1.5-blueviolet)](https://github.com/open-hint-dev/hint)
 [![Hintbook: software--engineer](https://img.shields.io/badge/Hintbook-software--engineer-blue)](https://github.com/open-hint-dev/hintbook-software-engineer)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green)](https://github.com/open-hint-dev/hint)
 
 > **Disclaimer:** This is a fictional demonstration project built to showcase how [HINT](https://github.com/open-hint-dev/hint) keeps architectural boundaries intact in a multi-language microservice environment. No Weissman scores were inflated during the making of this repo.
+
+Reproducible performance, context-cost, and retrieval measurements live in HINT's [benchmark report](https://github.com/open-hint-dev/hint/blob/main/docs/09-benchmarks.md).
 
 ## Table of Contents
 
@@ -310,7 +312,7 @@ hint: 1 of 1 artifact(s) differ from what their specs produce.
 hint:   generated/wire_message.ts — run 'hint emit generated/wire_message.ts' to reconcile.
 ```
 
-`hint emit generated/wire_message.ts` updates the declaration and marker hash while preserving the filled validation body byte-for-byte. `hint diff generated/wire_message.ts` names the moved block because the committed `hint.lock` records it. Run [`./demo-smoke.sh`](demo-smoke.sh) to replay the CLI-only tour; its expected status failure is asserted explicitly so it cannot become a false-green gate.
+`hint emit generated/wire_message.ts` updates the declaration and marker hash while preserving the filled validation body byte-for-byte. `hint diff generated/wire_message.ts` names the moved block because the committed `hint.lock` records it. Run [`./demo-smoke.sh`](demo-smoke.sh) to replay the CLI-only tour; its expected status failure is asserted explicitly so it cannot become a false-green gate. Release maintainers can set `HINT_BIN` and `HINTBOOK_SOFTWARE_ENGINEER` to verify unpublished local builds.
 
 > Letting an agent loose on a polyglot repo without contracts is like hiring a brilliant engineer who reads none of your docs and forgets every convention between tasks: fast code, camelCase on one side of the pipe, snake_case on the other, and a stack trace in the JSON stream at the worst possible moment. Integration review ends up taking longer than writing the code yourself.
 >
